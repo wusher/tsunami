@@ -95,10 +95,8 @@ func parseLsofOutput(output string) ([]PortInfo, error) {
 	var ports []PortInfo
 	scanner := bufio.NewScanner(strings.NewReader(output))
 
-	// Skip header line
-	if scanner.Scan() {
-		// First line is header: COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME
-	}
+	// Skip header line (COMMAND PID USER FD TYPE DEVICE SIZE/OFF NODE NAME)
+	scanner.Scan()
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -185,10 +183,8 @@ func parseProcNetTCP(path, proto string) ([]PortInfo, error) {
 	var ports []PortInfo
 	scanner := bufio.NewScanner(file)
 
-	// Skip header line
-	if scanner.Scan() {
-		// Header: sl local_address rem_address st tx_queue rx_queue tr tm->when retrnsmt uid timeout inode
-	}
+	// Skip header line (sl local_address rem_address st tx_queue rx_queue tr tm->when retrnsmt uid timeout inode)
+	scanner.Scan()
 
 	for scanner.Scan() {
 		line := scanner.Text()

@@ -15,6 +15,7 @@ const (
 	SIGTERM Signal = "TERM"
 	SIGKILL Signal = "KILL"
 	SIGINT  Signal = "INT"
+	SIGHUP  Signal = "HUP"
 )
 
 // ParseSignal parses a signal name (case-insensitive)
@@ -26,8 +27,10 @@ func ParseSignal(s string) (Signal, error) {
 		return SIGKILL, nil
 	case "INT", "SIGINT":
 		return SIGINT, nil
+	case "HUP", "SIGHUP":
+		return SIGHUP, nil
 	default:
-		return "", fmt.Errorf("unknown signal: %s", s)
+		return "", fmt.Errorf("unknown signal: %s (valid: TERM, KILL, INT, HUP)", s)
 	}
 }
 
@@ -38,6 +41,8 @@ func (s Signal) toSyscall() syscall.Signal {
 		return syscall.SIGKILL
 	case SIGINT:
 		return syscall.SIGINT
+	case SIGHUP:
+		return syscall.SIGHUP
 	default:
 		return syscall.SIGTERM
 	}
@@ -61,16 +66,21 @@ func Kill(pid int, sig Signal) error {
 	return nil
 }
 
-// KillWithEscalation sends SIGTERM, waits, then SIGKILL if needed
+// KillWithEscalation sends SIGTERM, waits 2 seconds, then SIGKILL if needed
 func KillWithEscalation(pid int) error {
+	return KillWithEscalationTimeout(pid, 2*time.Second)
+}
+
+// KillWithEscalationTimeout sends SIGTERM, waits for timeout, then SIGKILL if needed
+func KillWithEscalationTimeout(pid int, timeout time.Duration) error {
 	// First, try SIGTERM
 	err := Kill(pid, SIGTERM)
 	if err != nil {
 		return err
 	}
 
-	// Wait up to 2 seconds for process to exit
-	deadline := time.Now().Add(2 * time.Second)
+	// Wait up to timeout for process to exit
+	deadline := time.Now().Add(timeout)
 	for time.Now().Before(deadline) {
 		if !isProcessAlive(pid) {
 			return nil
