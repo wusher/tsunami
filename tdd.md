@@ -20,7 +20,7 @@ Opens a TUI displaying all processes listening on ports. User selects a process,
 $ tsunami 3000
 ```
 
-Finds and kills the process listening on port 3000. Exits with status 0 on success, 1 on failure.
+Finds the process listening on port 3000, prompts for confirmation, then kills it. Use `--force` to skip confirmation. Exits with status 0 on success, 1 on failure.
 
 ## Architecture
 
@@ -58,8 +58,12 @@ type PortInfo struct {
 }
 
 func Scan() ([]PortInfo, error)
-func FindByPort(port int) (*PortInfo, error)
+func FindByPort(port int) ([]PortInfo, error) // Returns all processes on port (SO_REUSEPORT)
 ```
+
+**Multiple Processes on Same Port:**
+
+When multiple processes share a port (via SO_REUSEPORT), `FindByPort` returns all matching processes. The CLI will display an error listing all PIDs and exit, requiring the user to kill specific PIDs manually.
 
 ### Process Killer (`internal/killer/killer.go`)
 
@@ -209,7 +213,7 @@ tsunami [port] [flags]
 | Flag | Short | Description |
 |------|-------|-------------|
 | `--force` | `-f` | Skip confirmation prompt |
-| `--signal` | `-s` | Signal to send (TERM, KILL, INT). Default: TERM |
+| `--signal` | `-s` | Signal to send (TERM, KILL, INT). Case-insensitive. Default: TERM |
 | `--list` | `-l` | List listening ports and exit (no kill) |
 | `--quiet` | `-q` | Suppress output except errors |
 
@@ -283,6 +287,7 @@ if args (ports):
 | Permission denied | 1 | "Permission denied. Try sudo." |
 | Invalid port | 1 | "Invalid port: X" |
 | Invalid signal | 1 | "Unknown signal: X" |
+| Multiple processes on port | 1 | "Multiple processes on port X: PID1, PID2. Kill manually." |
 | Force without port | 1 | "Force mode requires port argument" |
 | User cancelled | 0 | (none) |
 | Partial failure (multiple ports) | 1 | Lists failures, exits 1 |
