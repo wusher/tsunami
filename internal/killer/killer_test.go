@@ -229,3 +229,85 @@ func TestKillWithEscalationTimeoutNonexistent(t *testing.T) {
 		t.Error("KillWithEscalationTimeout(999999999) expected error for nonexistent process")
 	}
 }
+
+
+func TestKillWithDifferentSignals(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping process test in short mode")
+	}
+
+	signals := []Signal{SIGKILL, SIGINT, SIGHUP}
+
+	for _, sig := range signals {
+		t.Run(string(sig), func(t *testing.T) {
+			cmd := exec.Command("sleep", "30")
+			if err := cmd.Start(); err != nil {
+				t.Fatalf("failed to start test process: %v", err)
+			}
+
+			pid := cmd.Process.Pid
+
+			defer func() {
+				_ = cmd.Process.Kill()
+				_ = cmd.Wait()
+			}()
+
+			time.Sleep(100 * time.Millisecond)
+
+			err := Kill(pid, sig)
+			if err != nil {
+				t.Errorf("Kill(%d, %s) returned error: %v", pid, sig, err)
+			}
+
+			_ = cmd.Wait()
+		})
+	}
+}
+
+func TestSignalString(t *testing.T) {
+	// Test that Signal constants have expected string representations
+	tests := []struct {
+		sig      Signal
+		expected string
+	}{
+		{SIGTERM, "TERM"},
+		{SIGKILL, "KILL"},
+		{SIGINT, "INT"},
+		{SIGHUP, "HUP"},
+	}
+
+	for _, tt := range tests {
+		if string(tt.sig) != tt.expected {
+			t.Errorf("Signal %v string = %q, expected %q", tt.sig, string(tt.sig), tt.expected)
+		}
+	}
+}
+
+func TestIsProcessAliveWithCurrentProcess(t *testing.T) {
+	// Our own process should be alive
+	if !isProcessAlive(os.Getpid()) {
+		t.Error("current process should be detected as alive")
+	}
+}
+
+func TestKillWithEscalationTimeoutProcessExitsBeforeTimeout(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping process test in short mode")
+	}
+
+	// Start a very short-lived process
+	cmd := exec.Command("sleep", "0.1")
+	if err := cmd.Start(); err != nil {
+		t.Fatalf("failed to start test process: %v", err)
+	}
+
+	pid := cmd.Process.Pid
+
+	// Wait for process to exit naturally
+	_ = cmd.Wait()
+
+	// Process is already dead, KillWithEscalationTimeout should handle gracefully
+	// It may return an error because the process no longer exists
+	_ = KillWithEscalationTimeout(pid, time.Second)
+	// Not checking error because behavior depends on timing
+}
