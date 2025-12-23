@@ -1,3 +1,6 @@
+// Package ports provides network port scanning functionality to discover
+// processes listening on TCP ports. It supports both macOS (via lsof) and
+// Linux (via /proc/net/tcp) platforms.
 package ports
 
 import (

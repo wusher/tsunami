@@ -1,3 +1,6 @@
+// Package tui provides an interactive terminal user interface for browsing
+// and killing processes listening on network ports. It uses the Bubbletea
+// framework for terminal rendering and the Lipgloss library for styling.
 package tui
 
 import (
@@ -77,14 +80,17 @@ func matchesFilter(p ports.PortInfo, filter string) bool {
 		containsIgnoreCase(p.User, filter)
 }
 
+// contains checks if substr is present in s.
 func contains(s, substr string) bool {
 	return len(substr) <= len(s) && findSubstring(s, substr) != -1
 }
 
+// containsIgnoreCase checks if substr is present in s, ignoring case.
 func containsIgnoreCase(s, substr string) bool {
 	return contains(toLower(s), toLower(substr))
 }
 
+// toLower converts ASCII characters to lowercase.
 func toLower(s string) string {
 	b := make([]byte, len(s))
 	for i := 0; i < len(s); i++ {
@@ -98,6 +104,7 @@ func toLower(s string) string {
 	return string(b)
 }
 
+// findSubstring returns the index of substr in s, or -1 if not found.
 func findSubstring(s, substr string) int {
 	for i := 0; i <= len(s)-len(substr); i++ {
 		if s[i:i+len(substr)] == substr {

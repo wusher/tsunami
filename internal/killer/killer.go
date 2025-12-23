@@ -1,3 +1,6 @@
+// Package killer provides process termination functionality with signal handling.
+// It supports sending various Unix signals to processes and implements graceful
+// termination with automatic escalation from SIGTERM to SIGKILL.
 package killer
 
 import (
