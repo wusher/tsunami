@@ -226,21 +226,23 @@ func listPorts() error {
 		p = filterPorts(p, filter)
 	}
 
-	if len(p) == 0 {
-		if jsonOut {
-			fmt.Println("[]")
-		} else {
-			fmt.Println("No listening ports found")
-		}
-		return nil
-	}
-
 	if jsonOut {
+		if len(p) == 0 {
+			fmt.Println("[]")
+			return nil
+		}
 		return printJSON(p)
 	}
 
+	// Always print header in table mode
 	fmt.Printf("%-8s %-10s %-20s %-15s %s\n", "PORT", "PID", "PROCESS", "USER", "PROTO")
 	fmt.Println(strings.Repeat("-", 65))
+
+	if len(p) == 0 {
+		fmt.Println("No listening ports found")
+		return nil
+	}
+
 	for _, port := range p {
 		process := port.Process
 		if len(process) > 20 {
