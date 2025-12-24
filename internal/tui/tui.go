@@ -43,12 +43,6 @@ var (
 			Bold(true).
 			Foreground(lipgloss.Color("#FFFFFF"))
 
-	modalStyle = lipgloss.NewStyle().
-			Border(lipgloss.RoundedBorder()).
-			BorderForeground(lipgloss.Color("#44475A")).
-			Padding(1, 2).
-			Align(lipgloss.Center)
-
 	warningStyle = lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#FFFC58")).
 			Bold(true)
@@ -217,7 +211,7 @@ func (m Model) View() string {
 
 	switch m.state {
 	case StateConfirm:
-		return m.viewWithModal()
+		return m.viewConfirm()
 	case StateError:
 		return m.viewError()
 	case StateKilling:
@@ -318,21 +312,45 @@ func (m Model) formatPortLine(p ports.PortInfo, selected bool) string {
 		styledPort, p.PID, process, p.User, p.Proto)
 }
 
-// viewWithModal renders the list with confirm modal overlay
-func (m Model) viewWithModal() string {
-	list := m.viewList()
-
+// viewConfirm renders the confirmation view
+func (m Model) viewConfirm() string {
 	if m.selected == nil {
-		return list
+		return m.viewList()
 	}
 
-	// Build modal
-	var modal strings.Builder
-	modal.WriteString(warningStyle.Render("Kill process?"))
-	modal.WriteString("\n\n")
-	modal.WriteString(fmt.Sprintf("%s (PID %d) on port %d",
-		m.selected.Process, m.selected.PID, m.selected.Port))
-	modal.WriteString("\n\n")
+	var b strings.Builder
+
+	// Calculate vertical centering
+	contentHeight := 11 // approximate height of content
+	topPadding := (m.height - contentHeight) / 2
+	if topPadding < 0 {
+		topPadding = 0
+	}
+
+	// Add top padding
+	for i := 0; i < topPadding; i++ {
+		b.WriteString("\n")
+	}
+
+	// Title
+	title := warningStyle.Render("⚠  KILL PROCESS?")
+	b.WriteString(m.centerText(title))
+	b.WriteString("\n\n")
+
+	// Process info box
+	processInfo := fmt.Sprintf("Process:  %s", m.selected.Process)
+	pidInfo := fmt.Sprintf("PID:      %d", m.selected.PID)
+	portInfo := fmt.Sprintf("Port:     %d", m.selected.Port)
+	userInfo := fmt.Sprintf("User:     %s", m.selected.User)
+
+	b.WriteString(m.centerText(processInfo))
+	b.WriteString("\n")
+	b.WriteString(m.centerText(pidInfo))
+	b.WriteString("\n")
+	b.WriteString(m.centerText(portInfo))
+	b.WriteString("\n")
+	b.WriteString(m.centerText(userInfo))
+	b.WriteString("\n\n")
 
 	// Buttons
 	var yesBtn, noBtn string
@@ -343,43 +361,25 @@ func (m Model) viewWithModal() string {
 		yesBtn = inactiveButtonStyle.Render("[ Yes ]")
 		noBtn = activeButtonStyle.Render("[ No ]")
 	}
-	modal.WriteString(yesBtn)
-	modal.WriteString("  ")
-	modal.WriteString(noBtn)
+	buttons := yesBtn + "    " + noBtn
+	b.WriteString(m.centerText(buttons))
+	b.WriteString("\n\n")
 
-	styledModal := modalStyle.Render(modal.String())
+	// Help text
+	help := dimStyle.Render("←/→ select  │  enter confirm  │  esc cancel")
+	b.WriteString(m.centerText(help))
 
-	// Center modal
-	modalWidth := lipgloss.Width(styledModal)
-	modalHeight := lipgloss.Height(styledModal)
-	x := (m.width - modalWidth) / 2
-	y := (m.height - modalHeight) / 2
-
-	return overlayModal(list, styledModal, x, y)
+	return b.String()
 }
 
-// overlayModal places a modal on top of content
-func overlayModal(content, modal string, x, y int) string {
-	contentLines := strings.Split(content, "\n")
-	modalLines := strings.Split(modal, "\n")
-
-	for i, modalLine := range modalLines {
-		lineY := y + i
-		if lineY >= 0 && lineY < len(contentLines) {
-			contentLine := contentLines[lineY]
-			// Simple overlay - pad content line if needed
-			for len(contentLine) < x {
-				contentLine += " "
-			}
-			if x >= 0 && x < len(contentLine) {
-				contentLines[lineY] = contentLine[:x] + modalLine
-			} else if x >= 0 {
-				contentLines[lineY] = contentLine + strings.Repeat(" ", x-len(contentLine)) + modalLine
-			}
-		}
+// centerText centers text horizontally based on terminal width
+func (m Model) centerText(text string) string {
+	textWidth := lipgloss.Width(text)
+	padding := (m.width - textWidth) / 2
+	if padding < 0 {
+		padding = 0
 	}
-
-	return strings.Join(contentLines, "\n")
+	return strings.Repeat(" ", padding) + text
 }
 
 // viewError renders error state

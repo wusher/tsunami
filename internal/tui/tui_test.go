@@ -311,9 +311,15 @@ func TestViewConfirm(t *testing.T) {
 
 	view := m.View()
 
-	// Modal should show the kill confirmation
-	if !strings.Contains(view, "Kill process?") {
-		t.Error("Confirm view should contain 'Kill process?'")
+	// Confirm view should show the kill confirmation
+	if !strings.Contains(view, "KILL PROCESS?") {
+		t.Error("Confirm view should contain 'KILL PROCESS?'")
+	}
+	if !strings.Contains(view, "node") {
+		t.Error("Confirm view should contain process name")
+	}
+	if !strings.Contains(view, "3000") {
+		t.Error("Confirm view should contain port number")
 	}
 }
 
@@ -457,14 +463,32 @@ func TestUpdateKillResultError(t *testing.T) {
 	}
 }
 
-func TestOverlayModal(t *testing.T) {
-	content := "line1\nline2\nline3\nline4\nline5"
-	modal := "modal"
+func TestCenterText(t *testing.T) {
+	m := NewModel()
+	m.SetSize(80, 24)
 
-	result := overlayModal(content, modal, 2, 2)
+	text := "Hello"
+	centered := m.centerText(text)
 
-	if !strings.Contains(result, "modal") {
-		t.Error("overlayModal should contain modal text")
+	// Should have padding before the text
+	if !strings.HasPrefix(centered, " ") {
+		t.Error("centerText should add padding")
+	}
+	if !strings.Contains(centered, "Hello") {
+		t.Error("centerText should contain the text")
+	}
+}
+
+func TestCenterTextNarrowTerminal(t *testing.T) {
+	m := NewModel()
+	m.SetSize(10, 24) // Narrow terminal
+
+	text := "Very Long Text Here"
+	centered := m.centerText(text)
+
+	// Should not have negative padding
+	if !strings.Contains(centered, text) {
+		t.Error("centerText should contain the text even in narrow terminal")
 	}
 }
 
