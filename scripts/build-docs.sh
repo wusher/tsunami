@@ -8,7 +8,7 @@ echo "Building Tsunami documentation with Volcano..."
 # Check if volcano is installed
 if ! command -v volcano &> /dev/null; then
   echo "Error: Volcano is not installed"
-  echo "Install with: go install github.com/wusher/volcano/cmd/volcano@latest"
+  echo "Install with: go install github.com/wusher/volcano@latest"
   exit 1
 fi
 

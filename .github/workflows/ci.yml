@@ -84,7 +84,7 @@ jobs:
 
       - name: Install Volcano
         run: |
-          go install github.com/wusher/volcano/cmd/volcano@latest
+          go install github.com/wusher/volcano@latest
           echo "$HOME/go/bin" >> $GITHUB_PATH
 
       - name: Build documentation
