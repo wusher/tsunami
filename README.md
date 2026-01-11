@@ -78,22 +78,13 @@ Comprehensive documentation is available at **[wusher.github.io/tsunami](https:/
 ### Building Docs Locally
 
 ```bash
-# Install Hugo static site generator
-# macOS:
-brew install hugo
-
-# Linux:
-sudo apt-get install hugo
-# or: snap install hugo
-
-# Windows:
-# Download from https://github.com/gohugoio/hugo/releases
+# Install Volcano static site generator
+go install github.com/wusher/volcano/cmd/volcano@latest
 
 # Build documentation
 ./scripts/build-docs.sh
 
-# Serve locally at http://localhost:1313
-./scripts/serve-docs.sh
+# Output will be in public/ directory
 ```
 
 ### Contributing to Documentation
@@ -101,10 +92,8 @@ sudo apt-get install hugo
 Documentation source files are in the `docs/` folder. To contribute:
 
 1. Edit markdown files in `docs/`
-2. Test locally: `./scripts/serve-docs.sh`
+2. Build locally: `./scripts/build-docs.sh`
 3. Submit a pull request
-
-See [SETUP_GITHUB_PAGES.md](docs/SETUP_GITHUB_PAGES.md) for detailed setup information.
 
 ## License
 
