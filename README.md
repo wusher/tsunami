@@ -1,5 +1,9 @@
 # Tsunami
 
+[![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://wusher.github.io/tsunami)
+[![Docs Build](https://github.com/wusher/tsunami/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/deploy-docs.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Kill processes listening on ports.
 
 ## Install
@@ -59,6 +63,40 @@ tsunami 3000 -s KILL
 
 - macOS (via `lsof`)
 - Linux (via `/proc/net/tcp`)
+
+## Documentation
+
+Comprehensive documentation is available at **[wusher.github.io/tsunami](https://wusher.github.io/tsunami)**
+
+### Quick Links
+
+- [Getting Started](https://wusher.github.io/tsunami/getting-started) - Installation and setup
+- [Basic Usage](https://wusher.github.io/tsunami/guides/basic-usage) - Command-line options
+- [Common Use Cases](https://wusher.github.io/tsunami/guides/common-use-cases) - Real-world scenarios
+- [CLI Reference](https://wusher.github.io/tsunami/reference/cli-commands) - Complete command reference
+
+### Building Docs Locally
+
+```bash
+# Install Volcano static site generator
+go install github.com/volcano/volcano/cmd/volcano@latest
+
+# Build documentation
+./scripts/build-docs.sh
+
+# Serve locally at http://localhost:8000
+./scripts/serve-docs.sh
+```
+
+### Contributing to Documentation
+
+Documentation source files are in the `docs/` folder. To contribute:
+
+1. Edit markdown files in `docs/`
+2. Test locally: `./scripts/serve-docs.sh`
+3. Submit a pull request
+
+See [SETUP_GITHUB_PAGES.md](docs/SETUP_GITHUB_PAGES.md) for detailed setup information.
 
 ## License
 
