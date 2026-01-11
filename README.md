@@ -1,7 +1,7 @@
 # Tsunami
 
 [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://wusher.github.io/tsunami)
-[![Docs Build](https://github.com/wusher/tsunami/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/deploy-docs.yml)
+[![CI](https://github.com/wusher/tsunami/actions/workflows/ci.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Kill processes listening on ports.

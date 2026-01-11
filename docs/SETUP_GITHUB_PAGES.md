@@ -33,18 +33,20 @@ The GitHub Actions workflow needs appropriate permissions:
 ### Automatic Deployment
 
 The documentation will automatically deploy when:
-- You push changes to the `main` branch
-- Changes are made to files in the `docs/` folder
-- Changes are made to `.github/workflows/deploy-docs.yml`
+- You push changes to the `master` branch
+- All CI checks (lint, test, build) pass successfully
+- The docs job runs as part of the main CI workflow
 
 ### Manual Deployment
 
 You can also trigger deployment manually:
 
 1. Go to **Actions** tab
-2. Select "Deploy Documentation" workflow
+2. Select "CI" workflow
 3. Click **"Run workflow"**
-4. Select branch and click **"Run workflow"**
+4. Select master branch and click **"Run workflow"**
+
+Note: The docs will only deploy on push to master, not on PRs.
 
 ## Step 4: Access Your Documentation
 
@@ -191,30 +193,23 @@ theme: "hugo-book"
 
 ### Workflow Customization
 
-Edit `.github/workflows/deploy-docs.yml` to:
+The documentation deployment is integrated into `.github/workflows/ci.yml` as the `docs` job.
 
 **Deploy only on docs changes:**
-```yaml
-on:
-  push:
-    branches: [main]
-    paths:
-      - 'docs/**'
-```
 
-**Deploy on tags:**
+Modify the `docs` job condition:
 ```yaml
-on:
-  push:
-    tags:
-      - 'v*'
+if: github.event_name == 'push' && github.ref == 'refs/heads/master' && contains(github.event.head_commit.modified, 'docs/')
 ```
 
 **Use custom build command:**
+
+Edit the build step:
 ```yaml
 - name: Build documentation
   run: |
-    hugo build --theme custom --output ./public
+    cd docs
+    hugo --theme custom --minify --destination ../public
 ```
 
 ## Maintenance
@@ -254,10 +249,10 @@ Add documentation badge to README:
 [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://wusher.github.io/tsunami)
 ```
 
-Add build status badge:
+Add CI status badge (includes docs deployment):
 
 ```markdown
-[![Docs](https://github.com/wusher/tsunami/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/deploy-docs.yml)
+[![CI](https://github.com/wusher/tsunami/actions/workflows/ci.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/ci.yml)
 ```
 
 ## Cost
