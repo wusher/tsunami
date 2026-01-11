@@ -126,6 +126,9 @@ go install github.com/wusher/volcano/cmd/volcano@latest
 ./scripts/build-docs.sh
 
 # Output will be in public/ directory
+
+# Or serve locally for development
+cd docs && volcano serve
 ```
 
 ## 📝 Documentation Structure
@@ -176,11 +179,12 @@ theme: "volcano-book"
 
 1. **Test Locally**
    ```bash
-   ./scripts/build-docs.sh
+   cd docs && volcano serve
    ```
-   - Verify documentation builds without errors
-   - Check output in public/ directory
-   - Review generated HTML files
+   - Preview documentation at http://localhost:8000
+   - Verify all pages render correctly
+   - Check all internal links work
+   - Test code examples
 
 2. **Review Content**
    - Check for typos and grammar
@@ -227,7 +231,7 @@ theme: "volcano-book"
 When updating documentation:
 
 1. **Edit markdown files** in `docs/` folder
-2. **Test locally**: `./scripts/build-docs.sh`
+2. **Test locally**: `cd docs && volcano serve`
 3. **Check links** work correctly
 4. **Use admonitions** for important notes:
    ```markdown

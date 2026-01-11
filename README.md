@@ -85,6 +85,9 @@ go install github.com/wusher/volcano/cmd/volcano@latest
 ./scripts/build-docs.sh
 
 # Output will be in public/ directory
+
+# Or serve locally for development
+cd docs && volcano serve
 ```
 
 ### Contributing to Documentation
@@ -92,7 +95,7 @@ go install github.com/wusher/volcano/cmd/volcano@latest
 Documentation source files are in the `docs/` folder. To contribute:
 
 1. Edit markdown files in `docs/`
-2. Build locally: `./scripts/build-docs.sh`
+2. Test locally: `cd docs && volcano serve`
 3. Submit a pull request
 
 ## License
