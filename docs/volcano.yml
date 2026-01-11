@@ -1,21 +1,16 @@
-# Volcano Configuration for Tsunami Documentation
+# Tsunami Documentation
 
-# Site metadata
 site:
-  title: "Tsunami Documentation"
-  description: "Kill processes listening on ports - Fast, intuitive CLI tool"
-  author: "wusher"
+  title: "Tsunami"
+  description: "Kill processes listening on ports"
   url: "https://wusher.github.io/tsunami"
 
-# Theme configuration
-theme: "docs"  # Use the docs theme (clean, documentation-focused)
+theme: "docs"
 
-# Build configuration
 build:
   output: "../public"
   clean: true
 
-# Navigation structure
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
@@ -29,29 +24,14 @@ nav:
       - Configuration: reference/configuration.md
   - Examples:
       - Development Workflows: examples/development-workflows.md
-      - Scripting & Automation: examples/scripting.md
+      - Scripting: examples/scripting.md
       - Advanced Patterns: examples/advanced-patterns.md
 
-# Features
 features:
   syntax_highlighting: true
   search: true
-  toc: true  # Table of contents
-  code_copy: true  # Copy button for code blocks
+  toc: true
+  code_copy: true
 
-# Markdown extensions
-markdown:
-  extensions:
-    - tables
-    - fenced_code
-    - footnotes
-    - admonitions  # Support for :::note, :::warning, etc.
-
-# Social links
 social:
   github: "https://github.com/wusher/tsunami"
-
-# Footer
-footer:
-  copyright: "© 2026 Tsunami Contributors"
-  license: "MIT License"

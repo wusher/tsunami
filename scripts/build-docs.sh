@@ -14,7 +14,7 @@ fi
 
 # Build docs
 cd docs
-volcano build . --output ../public --url https://wusher.github.io/tsunami/
+volcano build . --output ../public --url https://wusher.github.io/tsunami/ --view-transitions --accent-color sky-600
 
 echo ""
 echo "✓ Documentation built successfully!"
