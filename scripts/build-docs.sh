@@ -14,7 +14,7 @@ fi
 
 # Build docs
 cd docs
-volcano build --output ../public
+volcano build . --output ../public
 
 echo ""
 echo "✓ Documentation built successfully!"
