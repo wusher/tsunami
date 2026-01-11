@@ -79,7 +79,7 @@ Comprehensive documentation is available at **[wusher.github.io/tsunami](https:/
 
 ```bash
 # Install Volcano static site generator
-go install github.com/wusher/volcano/cmd/volcano@latest
+go install github.com/wusher/volcano@latest
 
 # Build documentation
 ./scripts/build-docs.sh

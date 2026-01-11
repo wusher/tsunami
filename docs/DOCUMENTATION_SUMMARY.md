@@ -120,7 +120,7 @@ This document provides an overview of the comprehensive documentation structure 
 ### Building Locally
 ```bash
 # Install Volcano
-go install github.com/wusher/volcano/cmd/volcano@latest
+go install github.com/wusher/volcano@latest
 
 # Build docs
 ./scripts/build-docs.sh
