@@ -1,0 +1,70 @@
+name: Cancel Workflows on Merge
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  cancel-workflows:
+    # Only run if the PR was merged (not just closed)
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cancel running workflows for merged branch
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branch = context.payload.pull_request.head.ref;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            console.log(`🌊 Tsunami: Canceling workflows for merged branch: ${branch}`);
+
+            try {
+              // Get all workflow runs for the merged branch
+              const { data: workflows } = await github.rest.actions.listWorkflowRunsForRepo({
+                owner,
+                repo,
+                branch,
+                status: 'in_progress'
+              });
+
+              console.log(`Found ${workflows.workflow_runs.length} running workflows`);
+
+              // Cancel each running workflow
+              for (const workflow of workflows.workflow_runs) {
+                console.log(`Canceling workflow: ${workflow.name} (ID: ${workflow.id})`);
+                await github.rest.actions.cancelWorkflowRun({
+                  owner,
+                  repo,
+                  run_id: workflow.id
+                });
+              }
+
+              // Also cancel any queued workflows
+              const { data: queuedWorkflows } = await github.rest.actions.listWorkflowRunsForRepo({
+                owner,
+                repo,
+                branch,
+                status: 'queued'
+              });
+
+              console.log(`Found ${queuedWorkflows.workflow_runs.length} queued workflows`);
+
+              for (const workflow of queuedWorkflows.workflow_runs) {
+                console.log(`Canceling queued workflow: ${workflow.name} (ID: ${workflow.id})`);
+                await github.rest.actions.cancelWorkflowRun({
+                  owner,
+                  repo,
+                  run_id: workflow.id
+                });
+              }
+
+              const total = workflows.workflow_runs.length + queuedWorkflows.workflow_runs.length;
+              console.log(`✅ Successfully canceled ${total} workflow(s) for branch: ${branch}`);
+            } catch (error) {
+              console.error(`❌ Error canceling workflows: ${error.message}`);
+              throw error;
+            }
