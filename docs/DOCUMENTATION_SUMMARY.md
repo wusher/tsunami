@@ -43,13 +43,12 @@ This document provides an overview of the comprehensive documentation structure 
 
 #### Build Scripts
 - **`scripts/build-docs.sh`** - Build docs locally
-- **`scripts/serve-docs.sh`** - Serve docs for preview (http://localhost:1313)
-- Both scripts are executable and include error handling
+- Script is executable and includes error handling
 
 #### Configuration
-- **`docs/hugo.yaml`** - Hugo static site generator configuration
+- **`docs/volcano.yaml`** - Volcano static site generator configuration
   - Site metadata (title, description, baseURL)
-  - Theme: "hugo-book" (clean documentation theme)
+  - Theme: "volcano-book" (clean documentation theme)
   - Features: syntax highlighting, search, TOC
 
 #### Setup Guide
@@ -97,7 +96,7 @@ This document provides an overview of the comprehensive documentation structure 
 ### Developer Experience
 - ✅ Quick start within 5 minutes
 - ✅ Progressive disclosure (basic → advanced)
-- ✅ Searchable content (via Hugo)
+- ✅ Searchable content (via Volcano)
 - ✅ Mobile-friendly (responsive theme)
 - ✅ Copy buttons on code blocks
 
@@ -109,27 +108,27 @@ This document provides an overview of the comprehensive documentation structure 
    ↓
 2. GitHub Actions triggers
    ↓
-3. Install Hugo
+3. Install Volcano
    ↓
-4. Build documentation (hugo --minify)
+4. Build documentation (volcano --minify)
    ↓
 5. Deploy to GitHub Pages
    ↓
 6. Available at: https://wusher.github.io/tsunami
 ```
 
-### Manual Preview
+### Building Locally
 ```bash
-# Install Hugo
-# macOS: brew install hugo
-# Linux: sudo apt-get install hugo
+# Install Volcano
+go install github.com/wusher/volcano/cmd/volcano@latest
 
 # Build docs
 ./scripts/build-docs.sh
 
-# Serve locally
-./scripts/serve-docs.sh
-# → http://localhost:1313
+# Output will be in public/ directory
+
+# Or serve locally for development
+cd docs && volcano serve
 ```
 
 ## 📝 Documentation Structure
@@ -139,7 +138,7 @@ docs/
 ├── index.md                           # Landing page
 ├── getting-started.md                 # Installation & setup
 ├── SETUP_GITHUB_PAGES.md             # Deployment guide
-├── hugo.yaml                          # Hugo config
+├── volcano.yaml                          # Volcano config
 │
 ├── guides/                            # Practical tutorials
 │   ├── basic-usage.md                # CLI options
@@ -159,7 +158,7 @@ docs/
 
 ## 🎨 Theme and Design
 
-### Hugo Book Theme
+### Volcano Book Theme
 - Clean, minimalist design
 - Sidebar navigation
 - Search functionality
@@ -169,9 +168,9 @@ docs/
 - Dark/light mode support
 
 ### Customization
-All visual customization can be done in `docs/hugo.yaml`:
+All visual customization can be done in `docs/volcano.yaml`:
 ```yaml
-theme: "hugo-book"
+theme: "volcano-book"
 ```
 
 ## 🔧 Next Steps
@@ -180,8 +179,9 @@ theme: "hugo-book"
 
 1. **Test Locally**
    ```bash
-   ./scripts/serve-docs.sh
+   cd docs && volcano serve
    ```
+   - Preview documentation at http://localhost:8000
    - Verify all pages render correctly
    - Check all internal links work
    - Test code examples
@@ -231,7 +231,7 @@ theme: "hugo-book"
 When updating documentation:
 
 1. **Edit markdown files** in `docs/` folder
-2. **Test locally**: `./scripts/serve-docs.sh`
+2. **Test locally**: `cd docs && volcano serve`
 3. **Check links** work correctly
 4. **Use admonitions** for important notes:
    ```markdown
@@ -240,7 +240,7 @@ When updating documentation:
    :::
    ```
 5. **Add code examples** that are practical and tested
-6. **Update navigation** in Hugo's content structure or menu config if needed
+6. **Update navigation** in Volcano's content structure or menu config if needed
 7. **Submit PR** with clear description
 
 ### Writing Style
@@ -261,7 +261,7 @@ A complete, professional documentation site has been created for Tsunami with:
 - **Practical examples** for real-world use
 - **Automatic deployment** via GitHub Actions
 - **Local preview** for development
-- **Professional design** with Hugo Book theme
+- **Professional design** with Volcano Book theme
 - **Easy maintenance** with clear guidelines
 
 The documentation is ready to deploy and will provide users with excellent support for using Tsunami effectively!
@@ -269,5 +269,5 @@ The documentation is ready to deploy and will provide users with excellent suppo
 ---
 
 **Created**: 2026-01-11
-**Branch**: `claude/create-hugo-docs-R2YAc`
+**Branch**: `claude/create-volcano-docs-R2YAc`
 **Status**: Ready for review and merge
