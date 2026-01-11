@@ -1,7 +1,7 @@
 # Tsunami
 
 [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://wusher.github.io/tsunami)
-[![Docs Build](https://github.com/wusher/tsunami/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/deploy-docs.yml)
+[![CI](https://github.com/wusher/tsunami/actions/workflows/ci.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Kill processes listening on ports.
@@ -78,13 +78,21 @@ Comprehensive documentation is available at **[wusher.github.io/tsunami](https:/
 ### Building Docs Locally
 
 ```bash
-# Install Volcano static site generator
-go install github.com/volcano/volcano/cmd/volcano@latest
+# Install Hugo static site generator
+# macOS:
+brew install hugo
+
+# Linux:
+sudo apt-get install hugo
+# or: snap install hugo
+
+# Windows:
+# Download from https://github.com/gohugoio/hugo/releases
 
 # Build documentation
 ./scripts/build-docs.sh
 
-# Serve locally at http://localhost:8000
+# Serve locally at http://localhost:1313
 ./scripts/serve-docs.sh
 ```
 

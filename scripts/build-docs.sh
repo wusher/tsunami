@@ -1,20 +1,23 @@
 #!/bin/bash
-# build-docs.sh - Build documentation locally with Volcano
+# build-docs.sh - Build documentation locally with Hugo
 
 set -e
 
-echo "Building Tsunami documentation with Volcano..."
+echo "Building Tsunami documentation with Hugo..."
 
-# Check if volcano is installed
-if ! command -v volcano &> /dev/null; then
-  echo "Error: Volcano is not installed"
-  echo "Install with: go install github.com/volcano/volcano/cmd/volcano@latest"
+# Check if hugo is installed
+if ! command -v hugo &> /dev/null; then
+  echo "Error: Hugo is not installed"
+  echo "Install with:"
+  echo "  - macOS: brew install hugo"
+  echo "  - Linux: sudo apt-get install hugo (or snap install hugo)"
+  echo "  - Or download from: https://github.com/gohugoio/hugo/releases"
   exit 1
 fi
 
 # Build docs
 cd docs
-volcano build --output ../public
+hugo --minify --destination ../public
 
 echo ""
 echo "✓ Documentation built successfully!"

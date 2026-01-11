@@ -43,15 +43,14 @@ This document provides an overview of the comprehensive documentation structure 
 
 #### Build Scripts
 - **`scripts/build-docs.sh`** - Build docs locally
-- **`scripts/serve-docs.sh`** - Serve docs for preview (http://localhost:8000)
+- **`scripts/serve-docs.sh`** - Serve docs for preview (http://localhost:1313)
 - Both scripts are executable and include error handling
 
 #### Configuration
-- **`docs/volcano.yml`** - Volcano static site generator configuration
-  - Site metadata (title, description, author)
-  - Navigation structure
-  - Theme: "docs" (clean documentation theme)
-  - Features: syntax highlighting, search, TOC, code copy buttons
+- **`docs/hugo.yaml`** - Hugo static site generator configuration
+  - Site metadata (title, description, baseURL)
+  - Theme: "hugo-book" (clean documentation theme)
+  - Features: syntax highlighting, search, TOC
 
 #### Setup Guide
 - **`docs/SETUP_GITHUB_PAGES.md`** - Comprehensive setup instructions
@@ -98,7 +97,7 @@ This document provides an overview of the comprehensive documentation structure 
 ### Developer Experience
 - ✅ Quick start within 5 minutes
 - ✅ Progressive disclosure (basic → advanced)
-- ✅ Searchable content (via Volcano)
+- ✅ Searchable content (via Hugo)
 - ✅ Mobile-friendly (responsive theme)
 - ✅ Copy buttons on code blocks
 
@@ -106,13 +105,13 @@ This document provides an overview of the comprehensive documentation structure 
 
 ### Automatic Deployment
 ```
-1. Push changes to main branch (in docs/ folder)
+1. Push changes to master branch (in docs/ folder)
    ↓
 2. GitHub Actions triggers
    ↓
-3. Install Go and Volcano
+3. Install Hugo
    ↓
-4. Build documentation (volcano build)
+4. Build documentation (hugo --minify)
    ↓
 5. Deploy to GitHub Pages
    ↓
@@ -121,15 +120,16 @@ This document provides an overview of the comprehensive documentation structure 
 
 ### Manual Preview
 ```bash
-# Install Volcano
-go install github.com/volcano/volcano/cmd/volcano@latest
+# Install Hugo
+# macOS: brew install hugo
+# Linux: sudo apt-get install hugo
 
 # Build docs
 ./scripts/build-docs.sh
 
 # Serve locally
 ./scripts/serve-docs.sh
-# → http://localhost:8000
+# → http://localhost:1313
 ```
 
 ## 📝 Documentation Structure
@@ -139,7 +139,7 @@ docs/
 ├── index.md                           # Landing page
 ├── getting-started.md                 # Installation & setup
 ├── SETUP_GITHUB_PAGES.md             # Deployment guide
-├── volcano.yml                        # Volcano config
+├── hugo.yaml                          # Hugo config
 │
 ├── guides/                            # Practical tutorials
 │   ├── basic-usage.md                # CLI options
@@ -159,19 +159,19 @@ docs/
 
 ## 🎨 Theme and Design
 
-### Volcano "docs" Theme
+### Hugo Book Theme
 - Clean, minimalist design
 - Sidebar navigation
 - Search functionality
 - Table of contents on each page
 - Syntax highlighting for code blocks
 - Responsive (mobile-friendly)
-- Dark mode support (if theme includes it)
+- Dark/light mode support
 
 ### Customization
-All visual customization can be done in `docs/volcano.yml`:
+All visual customization can be done in `docs/hugo.yaml`:
 ```yaml
-theme: "docs"  # or "blog", "minimal", "custom"
+theme: "hugo-book"
 ```
 
 ## 🔧 Next Steps
@@ -240,7 +240,7 @@ When updating documentation:
    :::
    ```
 5. **Add code examples** that are practical and tested
-6. **Update navigation** in `docs/volcano.yml` if adding new pages
+6. **Update navigation** in Hugo's content structure or menu config if needed
 7. **Submit PR** with clear description
 
 ### Writing Style
@@ -261,7 +261,7 @@ A complete, professional documentation site has been created for Tsunami with:
 - **Practical examples** for real-world use
 - **Automatic deployment** via GitHub Actions
 - **Local preview** for development
-- **Professional design** with Volcano's docs theme
+- **Professional design** with Hugo Book theme
 - **Easy maintenance** with clear guidelines
 
 The documentation is ready to deploy and will provide users with excellent support for using Tsunami effectively!
@@ -269,5 +269,5 @@ The documentation is ready to deploy and will provide users with excellent suppo
 ---
 
 **Created**: 2026-01-11
-**Branch**: `claude/create-volcano-docs-R2YAc`
+**Branch**: `claude/create-hugo-docs-R2YAc`
 **Status**: Ready for review and merge

@@ -3,27 +3,24 @@
 
 set -e
 
-PORT=${1:-8000}
+PORT=${1:-1313}
 
 echo "Serving Tsunami documentation locally..."
 
-# Check if volcano is installed
-if ! command -v volcano &> /dev/null; then
-  echo "Error: Volcano is not installed"
-  echo "Install with: go install github.com/volcano/volcano/cmd/volcano@latest"
+# Check if hugo is installed
+if ! command -v hugo &> /dev/null; then
+  echo "Error: Hugo is not installed"
+  echo "Install with:"
+  echo "  - macOS: brew install hugo"
+  echo "  - Linux: sudo apt-get install hugo (or snap install hugo)"
+  echo "  - Or download from: https://github.com/gohugoio/hugo/releases"
   exit 1
 fi
 
-# Check if docs are built
-if [ ! -d "public" ]; then
-  echo "Documentation not built yet. Building..."
-  ./scripts/build-docs.sh
-fi
-
-# Serve docs
+# Serve docs (Hugo builds automatically in serve mode)
 cd docs
-volcano serve --port "$PORT"
-
 echo ""
 echo "Documentation available at: http://localhost:$PORT"
 echo "Press Ctrl+C to stop the server"
+echo ""
+hugo server --port "$PORT" --bind 0.0.0.0

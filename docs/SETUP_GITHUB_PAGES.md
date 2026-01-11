@@ -1,6 +1,6 @@
 # GitHub Pages Setup Guide
 
-This guide explains how to set up and deploy Tsunami documentation to GitHub Pages using Volcano.
+This guide explains how to set up and deploy Tsunami documentation to GitHub Pages using Hugo.
 
 ## Prerequisites
 
@@ -33,18 +33,20 @@ The GitHub Actions workflow needs appropriate permissions:
 ### Automatic Deployment
 
 The documentation will automatically deploy when:
-- You push changes to the `main` branch
-- Changes are made to files in the `docs/` folder
-- Changes are made to `.github/workflows/deploy-docs.yml`
+- You push changes to the `master` branch
+- All CI checks (lint, test, build) pass successfully
+- The docs job runs as part of the main CI workflow
 
 ### Manual Deployment
 
 You can also trigger deployment manually:
 
 1. Go to **Actions** tab
-2. Select "Deploy Documentation" workflow
+2. Select "CI" workflow
 3. Click **"Run workflow"**
-4. Select branch and click **"Run workflow"**
+4. Select master branch and click **"Run workflow"**
+
+Note: The docs will only deploy on push to master, not on PRs.
 
 ## Step 4: Access Your Documentation
 
@@ -77,16 +79,22 @@ To use a custom domain:
 
 ## Local Development
 
-### Install Volcano
+### Install Hugo
 
+**macOS:**
 ```bash
-go install github.com/volcano/volcano/cmd/volcano@latest
+brew install hugo
 ```
 
-Add to your PATH:
+**Linux:**
 ```bash
-export PATH=$PATH:$(go env GOPATH)/bin
+sudo apt-get install hugo
+# or
+snap install hugo
 ```
+
+**Windows:**
+Download from [Hugo Releases](https://github.com/gohugoio/hugo/releases)
 
 ### Build Documentation Locally
 
@@ -102,7 +110,7 @@ Output will be in `public/` folder.
 ./scripts/serve-docs.sh
 ```
 
-This starts a local server at `http://localhost:8000`
+This starts a local server at `http://localhost:1313`
 
 You can specify a custom port:
 ```bash
@@ -111,22 +119,22 @@ You can specify a custom port:
 
 ### Hot Reload During Development
 
-While serving, Volcano watches for file changes and auto-reloads:
+Hugo automatically watches for file changes and reloads while serving:
 
 ```bash
 cd docs
-volcano serve --watch
+hugo server
 ```
 
 ## Troubleshooting
 
 ### Build Fails in GitHub Actions
 
-**Issue**: Workflow fails with "volcano: command not found"
+**Issue**: Workflow fails with "hugo: command not found"
 
-**Solution**: The workflow installs Volcano automatically. Check that:
-1. The `go-version` in workflow matches your go.mod version
-2. The Volcano package path is correct
+**Solution**: The workflow installs Hugo automatically using the peaceiris/actions-hugo action. Check that:
+1. The workflow uses the correct Hugo action
+2. Hugo version is set correctly in the workflow
 
 ### Pages Not Updating
 
@@ -153,65 +161,55 @@ volcano serve --watch
 **Issue**: Internal links don't work
 
 **Solution**:
-- Use relative paths: `./guides/basic-usage.md`
-- Not absolute: `/guides/basic-usage.md`
-- Volcano handles path resolution automatically
+- Use relative paths in markdown links
+- Hugo handles path resolution automatically based on your content structure
 
 ### Build Works Locally But Fails in CI
 
-**Issue**: `volcano build` works locally but fails in GitHub Actions
+**Issue**: `hugo build` works locally but fails in GitHub Actions
 
 **Solution**:
-1. Check go.mod version matches workflow
+1. Ensure Hugo version matches between local and CI
 2. Ensure all documentation files are committed
 3. Check for file path case sensitivity (CI uses Linux)
-4. Verify volcano.yml configuration
+4. Verify hugo.yaml configuration
 
 ## Configuration
 
-### volcano.yml
+### hugo.yaml
 
-Key configuration options in `docs/volcano.yml`:
+Key configuration options in `docs/hugo.yaml`:
 
 ```yaml
-# Site URL (update with your GitHub Pages URL)
-site:
-  url: "https://wusher.github.io/tsunami"
+# Base URL (update with your GitHub Pages URL)
+baseURL: "https://wusher.github.io/tsunami"
 
-# Output directory
-build:
-  output: "../public"
+# Site title
+title: "Tsunami Documentation"
 
 # Theme
-theme: "docs"  # or "blog", "minimal", "custom"
+theme: "hugo-book"
 ```
 
 ### Workflow Customization
 
-Edit `.github/workflows/deploy-docs.yml` to:
+The documentation deployment is integrated into `.github/workflows/ci.yml` as the `docs` job.
 
 **Deploy only on docs changes:**
-```yaml
-on:
-  push:
-    branches: [main]
-    paths:
-      - 'docs/**'
-```
 
-**Deploy on tags:**
+Modify the `docs` job condition:
 ```yaml
-on:
-  push:
-    tags:
-      - 'v*'
+if: github.event_name == 'push' && github.ref == 'refs/heads/master' && contains(github.event.head_commit.modified, 'docs/')
 ```
 
 **Use custom build command:**
+
+Edit the build step:
 ```yaml
 - name: Build documentation
   run: |
-    volcano build --theme custom --output ./public
+    cd docs
+    hugo --theme custom --minify --destination ../public
 ```
 
 ## Maintenance
@@ -226,7 +224,7 @@ on:
 ### Adding New Pages
 
 1. Create new `.md` file in appropriate folder
-2. Add to navigation in `docs/volcano.yml`:
+2. Add to navigation in `docs/hugo.yml`:
    ```yaml
    nav:
      - New Page: path/to/new-page.md
@@ -235,7 +233,7 @@ on:
 
 ### Updating Theme
 
-Update `theme` in `docs/volcano.yml`:
+Update `theme` in `docs/hugo.yml`:
 
 ```yaml
 theme: "custom"  # Options: docs, blog, minimal, custom
@@ -251,10 +249,10 @@ Add documentation badge to README:
 [![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://wusher.github.io/tsunami)
 ```
 
-Add build status badge:
+Add CI status badge (includes docs deployment):
 
 ```markdown
-[![Docs](https://github.com/wusher/tsunami/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/deploy-docs.yml)
+[![CI](https://github.com/wusher/tsunami/actions/workflows/ci.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/ci.yml)
 ```
 
 ## Cost
@@ -290,13 +288,13 @@ permissions:
 - ✅ Documentation is now live
 - 📝 Update documentation content
 - 🎨 Customize theme and styling
-- 🔍 Add search functionality (built into Volcano)
+- 🔍 Add search functionality (built into Hugo)
 - 📊 Set up analytics (optional)
 - 🌐 Configure custom domain (optional)
 
 ## Support
 
-- **Volcano Documentation**: [volcano.dev/docs](https://volcano.dev/docs)
+- **Hugo Documentation**: [hugo.dev/docs](https://hugo.dev/docs)
 - **GitHub Pages**: [docs.github.com/pages](https://docs.github.com/en/pages)
 - **Issues**: Open an issue in the repository
 
