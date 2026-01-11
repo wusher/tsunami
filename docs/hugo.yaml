@@ -1,0 +1,50 @@
+baseURL: "https://wusher.github.io/tsunami"
+languageCode: "en-us"
+title: "Tsunami Documentation"
+theme: "hugo-book"
+
+# Enable syntax highlighting
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    anchorLineNos: false
+    codeFences: true
+    guessSyntax: false
+    hl_Lines: ""
+    lineAnchors: ""
+    lineNoStart: 1
+    lineNos: false
+    lineNumbersInTable: true
+    noClasses: true
+    style: monokai
+    tabWidth: 4
+  tableOfContents:
+    endLevel: 3
+    ordered: false
+    startLevel: 2
+
+params:
+  BookTheme: "auto"
+  BookToC: true
+  BookSearch: true
+  BookRepo: "https://github.com/wusher/tsunami"
+  BookEditPath: "edit/master/docs"
+
+  # Site description
+  description: "Kill processes listening on ports - Fast, intuitive CLI tool"
+  author: "wusher"
+
+# Menu structure
+menu:
+  after:
+    - name: "GitHub"
+      url: "https://github.com/wusher/tsunami"
+      weight: 10
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON

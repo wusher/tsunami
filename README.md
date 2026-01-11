@@ -78,13 +78,21 @@ Comprehensive documentation is available at **[wusher.github.io/tsunami](https:/
 ### Building Docs Locally
 
 ```bash
-# Install Volcano static site generator
-go install github.com/volcano/volcano/cmd/volcano@latest
+# Install Hugo static site generator
+# macOS:
+brew install hugo
+
+# Linux:
+sudo apt-get install hugo
+# or: snap install hugo
+
+# Windows:
+# Download from https://github.com/gohugoio/hugo/releases
 
 # Build documentation
 ./scripts/build-docs.sh
 
-# Serve locally at http://localhost:8000
+# Serve locally at http://localhost:1313
 ./scripts/serve-docs.sh
 ```
 
