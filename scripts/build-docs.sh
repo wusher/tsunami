@@ -14,7 +14,7 @@ fi
 
 # Build docs
 cd docs
-volcano build . --output ../public
+volcano build . --output ../public --url https://wusher.github.io/tsunami/
 
 echo ""
 echo "✓ Documentation built successfully!"
