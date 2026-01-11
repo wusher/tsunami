@@ -90,7 +90,7 @@ jobs:
       - name: Build documentation
         run: |
           cd docs
-          volcano build --output ../public
+          volcano build . --output ../public
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
