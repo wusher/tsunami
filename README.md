@@ -1,6 +1,5 @@
 # Tsunami
 
-[![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://wusher.github.io/tsunami)
 [![CI](https://github.com/wusher/tsunami/actions/workflows/ci.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -8,11 +7,19 @@ Kill processes listening on ports.
 
 ## Install
 
+### Pre-built Binaries
+
+Download from [GitHub Releases](https://github.com/wusher/tsunami/releases) for your platform:
+- Linux (amd64, arm64)
+- macOS (amd64, arm64)
+
+### Go Install
+
 ```bash
 go install github.com/wusher/tsunami/cmd/tsunami@latest
 ```
 
-Or build from source:
+### Build from Source
 
 ```bash
 go build -o tsunami ./cmd/tsunami/
@@ -24,10 +31,7 @@ go build -o tsunami ./cmd/tsunami/
 # Interactive TUI - browse and kill
 tsunami
 
-# Kill process on port 3000 (prompts for confirmation)
-tsunami 3000
-
-# Kill without confirmation
+# Kill process on port 3000
 tsunami 3000 -f
 
 # Kill multiple ports
@@ -45,9 +49,11 @@ tsunami 3000 -s KILL
 | Flag | Short | Description |
 |------|-------|-------------|
 | `--force` | `-f` | Skip confirmation prompt |
-| `--signal` | `-s` | Signal to send (TERM, KILL, INT). Default: TERM |
-| `--list` | `-l` | List listening ports and exit |
+| `--signal` | `-s` | Signal to send (TERM, KILL, INT) |
+| `--list` | `-l` | List listening ports |
 | `--quiet` | `-q` | Suppress output except errors |
+| `--dry-run` | `-n` | Show what would be killed |
+| `--timeout` | `-t` | Escalation timeout (default: 2s) |
 
 ## TUI Controls
 
@@ -55,9 +61,8 @@ tsunami 3000 -s KILL
 |-----|--------|
 | Type | Filter list |
 | Up/Down | Navigate |
-| Enter | Select process to kill |
-| Backspace | Delete filter character |
-| Esc | Clear filter / Quit |
+| Enter | Select to kill |
+| Esc | Quit |
 
 ## Platform Support
 
@@ -66,37 +71,7 @@ tsunami 3000 -s KILL
 
 ## Documentation
 
-Comprehensive documentation is available at **[wusher.github.io/tsunami](https://wusher.github.io/tsunami)**
-
-### Quick Links
-
-- [Getting Started](https://wusher.github.io/tsunami/getting-started) - Installation and setup
-- [Basic Usage](https://wusher.github.io/tsunami/guides/basic-usage) - Command-line options
-- [Common Use Cases](https://wusher.github.io/tsunami/guides/common-use-cases) - Real-world scenarios
-- [CLI Reference](https://wusher.github.io/tsunami/reference/cli-commands) - Complete command reference
-
-### Building Docs Locally
-
-```bash
-# Install Volcano static site generator
-go install github.com/wusher/volcano@latest
-
-# Build documentation
-./scripts/build-docs.sh
-
-# Output will be in public/ directory
-
-# Or serve locally for development
-cd docs && volcano serve
-```
-
-### Contributing to Documentation
-
-Documentation source files are in the `docs/` folder. To contribute:
-
-1. Edit markdown files in `docs/`
-2. Test locally: `cd docs && volcano serve`
-3. Submit a pull request
+Full documentation: [wusher.github.io/tsunami](https://wusher.github.io/tsunami)
 
 ## License
 
