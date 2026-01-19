@@ -9,6 +9,6 @@
   "pwa": true,
   "search": true,
   "allowBrokenLinks": false,
-  "favicon": "docs/logo.png",
-  "ogImage": "docs/logo.png"
+  "favicon": "logo.png",
+  "ogImage": "logo.png"
 }
