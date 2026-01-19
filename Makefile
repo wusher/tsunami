@@ -1,4 +1,4 @@
-.PHONY: build test lint clean help setup
+.PHONY: build test lint clean help setup serve
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -17,3 +17,7 @@ clean: ## Clean build artifacts
 
 setup: ## Install development tools
 	mise install
+
+serve: ## Serve docs locally on port 1812
+	go install github.com/wusher/volcano@latest
+	volcano serve --port 1812 --accent-color="#0ea5e9" docs

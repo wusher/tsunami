@@ -1,0 +1,12 @@
+{
+  "title": "Tsunami 🌊",
+  "theme": "docs",
+  "topNav": false,
+  "breadcrumbs": false,
+  "pageNav": true,
+  "instantNav": true,
+  "inlineAssets": false,
+  "pwa": true,
+  "search": true,
+  "allowBrokenLinks": false
+}

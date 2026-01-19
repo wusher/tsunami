@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.png" alt="Tsunami Logo" width="200">
+</p>
+
 # Tsunami
 
 Kill processes listening on ports. Fast, simple, interactive.

@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo.png" alt="Tsunami Logo" width="200">
+</p>
+
 # Tsunami
 
 [![CI](https://github.com/wusher/tsunami/actions/workflows/ci.yml/badge.svg)](https://github.com/wusher/tsunami/actions/workflows/ci.yml)
