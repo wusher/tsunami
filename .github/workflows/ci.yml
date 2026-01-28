@@ -61,7 +61,7 @@ jobs:
           go-version: "1.21"
 
       - name: Build
-        run: go build -o tsunami ./cmd/tsunami/
+        run: go build -o tsunami .
 
       - name: Verify binary
         run: ./tsunami --help

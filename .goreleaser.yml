@@ -3,7 +3,7 @@ version: 2
 project_name: tsunami
 
 builds:
-  - main: ./cmd/tsunami
+  - main: .
     binary: tsunami
     env:
       - CGO_ENABLED=0
